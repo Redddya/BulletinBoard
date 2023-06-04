@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 public class Main {
     public static void main(String[] args) {
         MatchingAdService service = new MatchingAdServiceImpl();
-        service.deleteById(59);
+        AnnouncementService announcementService = new AnnouncementServiceImpl();
+
+
+        System.out.println(service.filter(announcementService.findById(79)));
     }
 }

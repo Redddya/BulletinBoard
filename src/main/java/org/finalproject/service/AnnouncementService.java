@@ -12,5 +12,4 @@ public interface AnnouncementService extends CRUDService<Announcement> {
     List<Announcement> showByAuthorId(int id);
     List<Announcement> showByKeyWord(String keyWord);
     List<Announcement> showByDate(LocalDateTime date);
-
 }

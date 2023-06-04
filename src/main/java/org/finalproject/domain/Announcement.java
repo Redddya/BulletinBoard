@@ -7,6 +7,7 @@ package org.finalproject.domain;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,11 +23,14 @@ import java.time.LocalDateTime;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@OptimisticLocking
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "announcement_id")
     int id;
+    @Version
+    long version;
     @Column(name = "announcement_name")
     String name;
     @Column(name = "publication_date")

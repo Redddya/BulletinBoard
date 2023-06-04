@@ -33,4 +33,9 @@ public class AuthorServiceImpl implements CRUDService<Author> {
     public List<Author> findAll() {
         return dao.findAll();
     }
+
+    @Override
+    public Author findById(int id) {
+        return dao.findById(id);
+    }
 }

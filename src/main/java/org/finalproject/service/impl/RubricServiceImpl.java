@@ -31,6 +31,11 @@ public class RubricServiceImpl implements CRUDService<Rubric> {
 
     @Override
     public List<Rubric> findAll() {
-        return null;
+        return dao.findAll();
+    }
+
+    @Override
+    public Rubric findById(int id) {
+        return dao.findById(id);
     }
 }

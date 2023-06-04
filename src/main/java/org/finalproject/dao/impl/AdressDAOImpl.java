@@ -26,17 +26,8 @@ public class AdressDAOImpl implements CRUDDao<Adress> {
         EntityManager entityManager = FACTORY.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        Query query = entityManager.createQuery(
-                "UPDATE Adress ad " +
-                        "SET ad.country = :ad_country, " +
-                        "ad.city = :ad_city, " +
-                        "ad.street = :ad_street, " +
-                        "ad.house = :ad_house");
-        query.setParameter("ad_country", adress.getCountry());
-        query.setParameter("ad_city", adress.getCity());
-        query.setParameter("ad_street", adress.getStreet());
-        query.setParameter("ad_house", adress.getHouse());
-        query.executeUpdate();
+        Adress adress1 = entityManager.merge(adress);
+        entityManager.persist(adress1);
         transaction.commit();
     }
 

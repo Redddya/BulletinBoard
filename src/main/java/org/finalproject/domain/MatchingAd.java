@@ -1,6 +1,7 @@
 package org.finalproject.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,7 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
+@OptimisticLocking
 public class MatchingAd {
  //   После сохранения объявления необходимо найти все э/почты Авторов,
  //   у к-рых поля MatchingAd(s) совпадают с параметрами нового объявления
@@ -18,6 +21,8 @@ public class MatchingAd {
     @Column(name = "matchingAd_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+   @Version
+   long version;
     @ManyToOne
     @JoinColumn(name = "FK_MatchingAd_Rubric")
     Rubric rubric;

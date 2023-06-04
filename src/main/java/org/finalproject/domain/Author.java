@@ -2,6 +2,7 @@ package org.finalproject.domain;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,11 +18,14 @@ import java.util.List;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@OptimisticLocking
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "author_id")
     int id;
+    @Version
+    long version;
     @Column(name = "author_name")
     String name;
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)

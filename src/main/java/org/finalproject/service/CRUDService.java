@@ -7,4 +7,5 @@ public interface CRUDService<T> {
     public void update(T entity);
     void deleteById(int id);
     List<T> findAll();
+    T findById(int id);
 }

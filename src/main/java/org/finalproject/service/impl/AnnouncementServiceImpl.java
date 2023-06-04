@@ -14,6 +14,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public AnnouncementServiceImpl(){ //???????????????????????
         dao = new AnnouncementDAOImpl();
     }
+    public Announcement findById(int id){
+        return dao.findById(id);
+    }
 
     @Override
     public void save(Announcement announcement) {

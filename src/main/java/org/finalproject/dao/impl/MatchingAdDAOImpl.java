@@ -12,12 +12,28 @@ public class MatchingAdDAOImpl implements MatchingAdDAO {
 
     @Override
     public List<MatchingAd> filter(Announcement announcement) {
-        List<MatchingAd> allMatchingAds = findAll();
+      /*  List<MatchingAd> allMatchingAds = findAll();
         BigDecimal price = announcement.getPrice();
         return allMatchingAds.stream().filter(matchingAd ->
                 price.compareTo(matchingAd.getPriceFrom()) >= 0
                         && price.compareTo(matchingAd.getPriceTo()) <= 0
                             && announcement.getRubric().getName().equals(matchingAd.getRubric().getName())).toList();
+       */
+        EntityManager entityManager = FACTORY.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        TypedQuery<MatchingAd> query = entityManager.
+                createQuery(
+                        "SELECT ma " +
+                                "FROM MatchingAd ma " +
+                                "WHERE :an_pr BETWEEN ma.priceFrom AND ma.priceTo AND " +
+                                ":an_name LIKE CONCAT('%', ma.title, '%')", MatchingAd.class
+        );
+        query.setParameter("an_pr", announcement.getPrice());
+        query.setParameter("an_name", announcement.getName());
+        List<MatchingAd> resultList = query.getResultList();
+        transaction.commit();
+        return resultList;
     }
 
     @Override

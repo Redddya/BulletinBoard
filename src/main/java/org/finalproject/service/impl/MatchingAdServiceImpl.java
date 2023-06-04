@@ -45,4 +45,9 @@ public class MatchingAdServiceImpl implements MatchingAdService {
     public List findAll() {
         return dao.findAll();
     }
+
+    @Override
+    public MatchingAd findById(int id) {
+        return dao.findById(id);
+    }
 }

@@ -32,4 +32,10 @@ public class AdressServiceImpl implements CRUDService<Adress> {
     public List<Adress> findAll() {
         return dao.findAll();
     }
+
+    @Override
+    public Adress findById(int id) {
+        return dao.findById(id);
+    }
+
 }
