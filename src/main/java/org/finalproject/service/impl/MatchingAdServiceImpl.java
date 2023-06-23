@@ -6,15 +6,14 @@ import org.finalproject.dao.impl.MatchingAdDAOImpl;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
 import org.finalproject.service.MatchingAdService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class MatchingAdServiceImpl implements MatchingAdService {
-
+    @Autowired
     private MatchingAdDAO dao;
-    public MatchingAdServiceImpl() {
-        dao = new MatchingAdDAOImpl();
-    }
 
     @Override
     public List<MatchingAd> filter(Announcement announcement) {

@@ -22,6 +22,7 @@ public class Rubric {
     @Column(name = "rubric_id")
     int id;
     @Version
-    long version;
+    int version;
+    @Column(name = "rubric_name")
     String name;
 }

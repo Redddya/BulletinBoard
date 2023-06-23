@@ -6,68 +6,48 @@ import org.finalproject.domain.Adress;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.Author;
 import org.finalproject.domain.Rubric;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
-
+@Transactional
+@Repository
 public class AuthorDAOImpl implements CRUDDao<Author> {
-
-    AnnouncementDAO dao = new AnnouncementDAOImpl();
-
+    @Autowired
+    private AnnouncementDAO dao;
+    @PersistenceContext
+    private EntityManager em;
     @Override
     public void save(Author entity) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(entity);
-        transaction.commit();
+        em.persist(entity);
+
     }
 
     @Override
     public void update(Author author) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Author author1 = entityManager.merge(author);
-        entityManager.persist(author1);
-        transaction.commit();
-    }
+        Author author1 = em.merge(author);
+        em.persist(author1);
+        }
 
     @Override
     public void deleteById(int id) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         dao.deleteAllByAuthorId(id);
-        Query query = entityManager
+        Query query = em
                 .createQuery("DELETE Author a WHERE a.id = :author_id");
         query.setParameter("author_id", id);
         query.executeUpdate();
-        transaction.commit();
-
     }
 
     @Override
     public List<Author> findAll() {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        TypedQuery<Author> query = entityManager.createQuery("FROM Author a", Author.class);
-        List<Author> authors = query.getResultList();
-        transaction.commit();
-        return authors;
+        TypedQuery<Author> query = em.createQuery("FROM Author a", Author.class);
+        return  query.getResultList();
     }
 
     @Override
     public Author findById(int id) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Author author = entityManager.find(Author.class, id);
-        transaction.commit();
-        return author;
+        return em.find(Author.class, id);
     }
 }

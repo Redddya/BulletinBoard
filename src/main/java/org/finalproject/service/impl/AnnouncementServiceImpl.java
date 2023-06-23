@@ -5,15 +5,17 @@ import org.finalproject.dao.CRUDDao;
 import org.finalproject.dao.impl.AnnouncementDAOImpl;
 import org.finalproject.domain.Announcement;
 import org.finalproject.service.AnnouncementService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class AnnouncementServiceImpl implements AnnouncementService {
+    @Autowired
     private AnnouncementDAO dao;
-    public AnnouncementServiceImpl(){ //???????????????????????
-        dao = new AnnouncementDAOImpl();
-    }
+
     public Announcement findById(int id){
         return dao.findById(id);
     }

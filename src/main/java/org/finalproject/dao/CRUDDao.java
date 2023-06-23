@@ -5,9 +5,6 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 public interface CRUDDao<T> {
-    public static final EntityManagerFactory FACTORY =
-            Persistence.
-                    createEntityManagerFactory("danil");
     public void save(T entity);
     public void update(T entity);
     void deleteById(int id);

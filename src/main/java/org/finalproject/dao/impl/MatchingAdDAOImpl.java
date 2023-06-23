@@ -3,26 +3,22 @@ package org.finalproject.dao.impl;
 import org.finalproject.dao.MatchingAdDAO;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Transactional
+@Repository
 public class MatchingAdDAOImpl implements MatchingAdDAO {
-
+    @PersistenceContext
+    private EntityManager em;
     @Override
     public List<MatchingAd> filter(Announcement announcement) {
-      /*  List<MatchingAd> allMatchingAds = findAll();
-        BigDecimal price = announcement.getPrice();
-        return allMatchingAds.stream().filter(matchingAd ->
-                price.compareTo(matchingAd.getPriceFrom()) >= 0
-                        && price.compareTo(matchingAd.getPriceTo()) <= 0
-                            && announcement.getRubric().getName().equals(matchingAd.getRubric().getName())).toList();
-       */
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        TypedQuery<MatchingAd> query = entityManager.
+        TypedQuery<MatchingAd> query = em.
                 createQuery(
                         "SELECT ma " +
                                 "FROM MatchingAd ma " +
@@ -31,9 +27,7 @@ public class MatchingAdDAOImpl implements MatchingAdDAO {
         );
         query.setParameter("an_pr", announcement.getPrice());
         query.setParameter("an_name", announcement.getName());
-        List<MatchingAd> resultList = query.getResultList();
-        transaction.commit();
-        return resultList;
+        return query.getResultList();
     }
 
     @Override
@@ -55,54 +49,32 @@ public class MatchingAdDAOImpl implements MatchingAdDAO {
 
     @Override
     public void save(MatchingAd entity) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(entity);
-        transaction.commit();
+        em.persist(entity);
     }
 
     @Override
     public void update(MatchingAd entity) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        MatchingAd matchingAd = entityManager.merge(entity);
-        entityManager.persist(matchingAd);
-        transaction.commit();
-    }
+        MatchingAd matchingAd = em.merge(entity);
+        em.persist(matchingAd);
+        }
 
 
     @Override
     public void deleteById(int id) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Query query = entityManager.
+        Query query = em.
                 createQuery("DELETE MatchingAd ma WHERE ma.id = :ma_id");
         query.setParameter("ma_id", id);
         query.executeUpdate();
-        transaction.commit();
     }
 
     @Override
     public List<MatchingAd> findAll() {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        TypedQuery<MatchingAd> query = entityManager.createQuery("FROM MatchingAd", MatchingAd.class);
-        List<MatchingAd> matchingAds = query.getResultList();
-        transaction.commit();
-        return matchingAds;
+        TypedQuery<MatchingAd> query = em.createQuery("FROM MatchingAd", MatchingAd.class);
+        return query.getResultList();
     }
 
     @Override
     public MatchingAd findById(int id) {
-        EntityManager entityManager = FACTORY.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        MatchingAd matchingAd = entityManager.find(MatchingAd.class, id);
-        transaction.commit();
-        return matchingAd;
+        return em.find(MatchingAd.class, id);
     }
 }

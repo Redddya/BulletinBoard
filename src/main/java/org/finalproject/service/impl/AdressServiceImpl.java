@@ -4,15 +4,17 @@ import org.finalproject.dao.CRUDDao;
 import org.finalproject.dao.impl.AdressDAOImpl;
 import org.finalproject.domain.Adress;
 import org.finalproject.service.CRUDService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class AdressServiceImpl implements CRUDService<Adress> {
-
+@Autowired
     private CRUDDao<Adress> dao;
-    public AdressServiceImpl() {
-        dao = new AdressDAOImpl();
-    }
+    //public AdressServiceImpl() {
+    //    dao = new AdressDAOImpl();
+    //}
     @Override
     public void save(Adress adress) {
     dao.save(adress);

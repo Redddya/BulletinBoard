@@ -5,14 +5,17 @@ import org.finalproject.dao.CRUDDao;
 import org.finalproject.dao.impl.AuthorDAOImpl;
 import org.finalproject.domain.Author;
 import org.finalproject.service.CRUDService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class AuthorServiceImpl implements CRUDService<Author> {
+    @Autowired
     private CRUDDao<Author> dao;
-    public AuthorServiceImpl() {
-        dao = new AuthorDAOImpl();
-    }
+    //public AuthorServiceImpl() {
+    //    dao = new AuthorDAOImpl();
+    //}
 
     @Override
     public void save(Author author) {

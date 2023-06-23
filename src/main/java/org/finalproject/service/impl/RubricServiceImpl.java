@@ -5,14 +5,16 @@ import org.finalproject.dao.CRUDDao;
 import org.finalproject.dao.impl.RubricDAOImpl;
 import org.finalproject.domain.Rubric;
 import org.finalproject.service.CRUDService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+@Service
 public class RubricServiceImpl implements CRUDService<Rubric> {
+    @Autowired
     private CRUDDao<Rubric> dao;
-    public RubricServiceImpl(){
-        dao = new RubricDAOImpl();
-    }
 
     @Override
     public void save(Rubric rubric) {
