@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Transactional
 @Repository
 public class AuthorDAOImpl implements CRUDDao<Author> {
@@ -19,17 +20,17 @@ public class AuthorDAOImpl implements CRUDDao<Author> {
     private AnnouncementDAO dao;
     @PersistenceContext
     private EntityManager em;
+
     @Override
     public void save(Author entity) {
         em.persist(entity);
-
     }
 
     @Override
     public void update(Author author) {
         Author author1 = em.merge(author);
         em.persist(author1);
-        }
+    }
 
     @Override
     public void deleteById(int id) {
@@ -43,7 +44,7 @@ public class AuthorDAOImpl implements CRUDDao<Author> {
     @Override
     public List<Author> findAll() {
         TypedQuery<Author> query = em.createQuery("FROM Author a", Author.class);
-        return  query.getResultList();
+        return query.getResultList();
     }
 
     @Override

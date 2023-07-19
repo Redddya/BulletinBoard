@@ -1,12 +1,14 @@
 package org.finalproject.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 @Entity
 @Table(name = "matching_ad")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,8 +23,8 @@ public class MatchingAd {
     @Column(name = "matchingAd_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-   @Version
-   long version;
+    @Version
+    long version;
     @ManyToOne
     @JoinColumn(name = "FK_MatchingAd_Rubric")
     Rubric rubric;
