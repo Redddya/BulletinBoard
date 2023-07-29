@@ -1,11 +1,9 @@
 package org.finalproject.service.impl;
 
-import org.finalproject.dao.AnnouncementDAO;
 import org.finalproject.dao.CRUDDao;
-import org.finalproject.dao.impl.RubricDAOImpl;
 import org.finalproject.domain.Rubric;
 import org.finalproject.service.CRUDService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.finalproject.util.exception.custom.RubricException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +11,11 @@ import java.util.List;
 
 @Service
 public class RubricServiceImpl implements CRUDService<Rubric> {
-    @Autowired
-    private CRUDDao<Rubric> dao;
+    private final CRUDDao<Rubric> dao;
+
+    public RubricServiceImpl(CRUDDao<Rubric> dao) {
+        this.dao = dao;
+    }
 
     @Override
     public void save(Rubric rubric) {
@@ -33,11 +34,17 @@ public class RubricServiceImpl implements CRUDService<Rubric> {
 
     @Override
     public List<Rubric> findAll() {
-        return dao.findAll();
+        List<Rubric> rubrics = dao.findAll();
+        if(rubrics.isEmpty())
+                throw new RubricException("Rubrics wasn't found");
+        return rubrics;
     }
 
     @Override
     public Rubric findById(int id) {
-        return dao.findById(id);
+        Rubric rubric = dao.findById(id);
+        if(rubric == null)
+            throw new RubricException("Rubric with this id wasn't found");
+        return rubric;
     }
 }

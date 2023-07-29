@@ -23,5 +23,6 @@ public class Email {
     int id;
     @Version
     long version;
+    @javax.validation.constraints.Email
     String email;
 }

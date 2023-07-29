@@ -5,7 +5,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
 
 //        автор(телефоны(отдельная сущность), адрес(отдельная сущность),
 //        имя, э/почта(отдельная сущность)). --Homework
@@ -27,14 +27,16 @@ public class Author {
     @Version
     long version;
     @Column(name = "author_name")
+    @Size(min = 2, max = 40, message = "Name must incorporates min 2 and max 40 characters")
     String name;
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "FK_Author_Phone")
     Phone phone;
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
-    @JoinColumn(name = "FK_Author_Adress")
-    Adress adress;
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinColumn(name = "FK_Author_Address")
+    Address address;
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "FK_Author_Email")
+    @javax.validation.constraints.Email
     Email email;
 }

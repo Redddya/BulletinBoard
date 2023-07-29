@@ -17,10 +17,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"org.finalproject.dao","org.finalproject.service"})
+@ComponentScan(basePackages = {"org.finalproject.dao", "org.finalproject.service"})
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class ConfigApp {
+public class DBConfigApp {
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory factory) {  // From where EntityManagerFactory
         JpaTransactionManager manager = new JpaTransactionManager();
@@ -59,5 +59,4 @@ public class ConfigApp {
         adapter.setGenerateDdl(true);
         return adapter;
     }
-
 }

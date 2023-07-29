@@ -3,12 +3,10 @@ package org.finalproject.dao.impl;
 import org.finalproject.dao.MatchingAdDAO;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -56,8 +54,7 @@ public class MatchingAdDAOImpl implements MatchingAdDAO {
     public void update(MatchingAd entity) {
         MatchingAd matchingAd = em.merge(entity);
         em.persist(matchingAd);
-        }
-
+    }
 
     @Override
     public void deleteById(int id) {

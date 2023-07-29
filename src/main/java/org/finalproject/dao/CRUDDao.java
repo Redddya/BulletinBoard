@@ -1,7 +1,5 @@
 package org.finalproject.dao;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 
 public interface CRUDDao<T> {

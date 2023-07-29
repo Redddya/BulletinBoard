@@ -2,10 +2,7 @@ package org.finalproject.dao.impl;
 
 import org.finalproject.dao.AnnouncementDAO;
 import org.finalproject.dao.CRUDDao;
-import org.finalproject.domain.Adress;
-import org.finalproject.domain.Announcement;
 import org.finalproject.domain.Author;
-import org.finalproject.domain.Rubric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +13,13 @@ import java.util.List;
 @Transactional
 @Repository
 public class AuthorDAOImpl implements CRUDDao<Author> {
-    @Autowired
-    private AnnouncementDAO dao;
+    private final AnnouncementDAO dao;
     @PersistenceContext
     private EntityManager em;
+
+    public AuthorDAOImpl(AnnouncementDAO dao) {
+        this.dao = dao;
+    }
 
     @Override
     public void save(Author entity) {

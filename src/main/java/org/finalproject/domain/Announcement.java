@@ -1,18 +1,14 @@
 package org.finalproject.domain;
 
-
-//- Объявление(название, дата публикации, текст объявления, стоимость услуги,
-//        автор(телефоны(отдельная сущность), адрес(отдельная сущность),
-//        имя, э/почта(отдельная сущность)). --Homework
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name = "announcements")
@@ -32,11 +28,18 @@ public class Announcement {
     @Version
     long version;
     @Column(name = "announcement_name")
+    @Size(min = 2, max = 40, message = "Name must incorporates min 2 and max 40 characters")
+    @NotEmpty(message = "Name can't be empty")
     String name;
     @Column(name = "publication_date")
     LocalDateTime publicationDate;
     @Column(name = "announcement_text")
+    @NotEmpty(message = "Description can't be empty")
+    @Size(min = 10, max = 200, message = "Text must incorporates min 10 and max 200 characters")
     String text;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer = 8, fraction = 2)
     BigDecimal price;
     @ManyToOne
     @JoinColumn(name = "FK_Announcement_Author")
@@ -44,4 +47,8 @@ public class Announcement {
     @ManyToOne
     @JoinColumn(name = "FK_Announcement_Rubric")
     Rubric rubric;
+    @NotNull(message = "Field isActive can't be null")
+    @Column(name = "is_active")
+    boolean isActive;
 }
+

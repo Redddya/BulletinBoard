@@ -16,14 +16,6 @@
 8) Подписывать автора на объявления с заданными параметрами.
 9) Удалять неактивные объявление(Scheduling).
 
-*
-Querydsl
-pessimistic locking
-*
-Hw
-optimistic locking
-
-
 К 8 пункту создать коллекцию доменов с полями:
 Category(ManyToOne)
 String title

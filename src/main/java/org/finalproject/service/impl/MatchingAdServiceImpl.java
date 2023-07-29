@@ -1,19 +1,20 @@
 package org.finalproject.service.impl;
 
 import org.finalproject.dao.MatchingAdDAO;
-import org.finalproject.dao.impl.AuthorDAOImpl;
-import org.finalproject.dao.impl.MatchingAdDAOImpl;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
 import org.finalproject.service.MatchingAdService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.finalproject.util.exception.custom.MatchingAdException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class MatchingAdServiceImpl implements MatchingAdService {
-    @Autowired
-    private MatchingAdDAO dao;
+    private final MatchingAdDAO dao;
+
+    public MatchingAdServiceImpl(MatchingAdDAO dao) {
+        this.dao = dao;
+    }
 
     @Override
     public List<MatchingAd> filter(Announcement announcement) {
@@ -42,11 +43,17 @@ public class MatchingAdServiceImpl implements MatchingAdService {
 
     @Override
     public List findAll() {
-        return dao.findAll();
+        List<MatchingAd> matchingAds = dao.findAll();
+        if (matchingAds.isEmpty())
+            throw new MatchingAdException("MatchingAds wasn't found");
+        return matchingAds;
     }
 
     @Override
     public MatchingAd findById(int id) {
-        return dao.findById(id);
+        MatchingAd matchingAd = dao.findById(id);
+        if(matchingAd == null)
+            throw new MatchingAdException("MatchingAds with this id wasn't found");
+        return matchingAd;
     }
 }

@@ -1,11 +1,9 @@
 package org.finalproject.dao.impl;
 
 import org.finalproject.dao.AnnouncementDAO;
-import org.finalproject.dao.MatchingAdDAO;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
 import org.finalproject.service.MatchingAdService;
-import org.finalproject.service.impl.MatchingAdServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,15 +15,14 @@ import java.util.List;
 @Repository
 @Transactional
 public class AnnouncementDAOImpl implements AnnouncementDAO {
-    @Autowired
-    private MatchingAdService service;
+
     @PersistenceContext
     private EntityManager em;
+
+
     @Override
     public void save(Announcement announcement) {
         em.persist(announcement);
-        List<MatchingAd> matchingAds = service.filter(announcement);
-        service.sendMassages(matchingAds, announcement);
     }
 
     @Override
@@ -39,6 +36,7 @@ public class AnnouncementDAOImpl implements AnnouncementDAO {
         Query query = em.
                 createQuery("DELETE Announcement a WHERE a.id = :an_id");
         query.setParameter("an_id", id);
+        query.executeUpdate();
     }
 
     @Override

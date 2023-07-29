@@ -16,12 +16,11 @@ public class RubricDAOImpl implements CRUDDao<Rubric> {
 
     @PersistenceContext
     private EntityManager em;
+    private final AnnouncementDAO dao;
 
-    //@PersistenceUnit
-    //private EntityManagerFactory factory;
-
-    @Autowired
-    private AnnouncementDAO dao;
+    public RubricDAOImpl(AnnouncementDAO dao) {
+        this.dao = dao;
+    }
 
     @Override
     public void save(Rubric rubric) {
