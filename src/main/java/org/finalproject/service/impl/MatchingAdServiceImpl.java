@@ -8,42 +8,54 @@ import org.finalproject.util.exception.custom.MatchingAdException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MatchingAdServiceImpl implements MatchingAdService {
-    private final MatchingAdDAO dao;
+    private final MatchingAdDAO matchingAdDAO;
 
-    public MatchingAdServiceImpl(MatchingAdDAO dao) {
-        this.dao = dao;
+    public MatchingAdServiceImpl(MatchingAdDAO matchingAdDAO) {
+        this.matchingAdDAO = matchingAdDAO;
     }
 
     @Override
-    public List<MatchingAd> filter(Announcement announcement) {
-        return dao.filter(announcement);
+    public void sendMassagesByMatchingAds(Announcement announcement) {
+        sendMassages(matchingAdDAO.filter(announcement), announcement);
     }
 
-    @Override
-    public int sendMassages(List<MatchingAd> matchingAds, Announcement announcement) {
-        return dao.sendMassages(matchingAds, announcement);
+    private int sendMassages(List<MatchingAd> matchingAds, Announcement announcement) {
+        int countOfMessage = 0;
+        for (MatchingAd match: matchingAds) {
+            System.out.println("Hi, " + match.getAuthor().getName() +
+                    "! I have a new purchase for you by your subscription on " + match.getRubric().getName() + " rubric. " +
+                    " So, my purchase is " + announcement.getName().toUpperCase() +
+                    "\n" + announcement.getText() +
+                    " \n With price " + announcement.getPrice() +
+                    " and author " + announcement.getAuthor().getName() + " with e-mail: "
+                    + announcement.getAuthor().getEmail().getEmail() +
+                    "\n We are waiting for you on our website!");
+            countOfMessage++;
+        }
+        return countOfMessage;
     }
-
     @Override
     public void save(MatchingAd entity) {
-        dao.save(entity);
+        matchingAdDAO.save(entity);
     }
 
     @Override
     public void update(MatchingAd entity) {
-        dao.update(entity);
+        matchingAdDAO.save(entity);
     }
 
     @Override
     public void deleteById(int id) {
-        dao.deleteById(id);
+        matchingAdDAO.deleteById(id);
     }
 
     @Override
     public List findAll() {
-        List<MatchingAd> matchingAds = dao.findAll();
+        List<MatchingAd> matchingAds = matchingAdDAO.findAll();
         if (matchingAds.isEmpty())
             throw new MatchingAdException("MatchingAds wasn't found");
         return matchingAds;
@@ -51,9 +63,9 @@ public class MatchingAdServiceImpl implements MatchingAdService {
 
     @Override
     public MatchingAd findById(int id) {
-        MatchingAd matchingAd = dao.findById(id);
-        if(matchingAd == null)
+        Optional<MatchingAd> foundMatchingAd = matchingAdDAO.findById(id);
+        if(foundMatchingAd.isEmpty())
             throw new MatchingAdException("MatchingAds with this id wasn't found");
-        return matchingAd;
+        return foundMatchingAd.get();
     }
 }

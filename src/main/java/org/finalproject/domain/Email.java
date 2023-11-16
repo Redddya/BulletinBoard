@@ -1,13 +1,16 @@
 package org.finalproject.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
 
-import javax.persistence.*;
 
 @Entity
-@Table(name = "Emails")
+@Table(name = "Emails", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email_id"),
+        @UniqueConstraint(columnNames = "email"),
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -23,6 +26,6 @@ public class Email {
     int id;
     @Version
     long version;
-    @javax.validation.constraints.Email
+    @jakarta.validation.constraints.Email
     String email;
 }

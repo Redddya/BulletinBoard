@@ -1,11 +1,9 @@
 package org.finalproject.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
-
-import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "phones")

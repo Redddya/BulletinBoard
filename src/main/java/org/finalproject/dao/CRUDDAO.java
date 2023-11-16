@@ -1,11 +1,12 @@
 package org.finalproject.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface CRUDDao<T> {
+public interface CRUDDAO<T> {
     public void save(T entity);
     public void update(T entity);
     void deleteById(int id);
     List<T> findAll();
-    T findById(int id);
+    Optional<T> findById(int id);
 }

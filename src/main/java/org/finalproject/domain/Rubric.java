@@ -1,11 +1,10 @@
 package org.finalproject.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OptimisticLocking;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "rubrics")

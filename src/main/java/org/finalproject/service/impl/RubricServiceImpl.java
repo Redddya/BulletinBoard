@@ -1,50 +1,51 @@
 package org.finalproject.service.impl;
 
-import org.finalproject.dao.CRUDDao;
+import org.finalproject.dao.CRUDDAO;
 import org.finalproject.domain.Rubric;
 import org.finalproject.service.CRUDService;
 import org.finalproject.util.exception.custom.RubricException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class RubricServiceImpl implements CRUDService<Rubric> {
-    private final CRUDDao<Rubric> dao;
+    private final CRUDDAO<Rubric> rubricDao;
 
-    public RubricServiceImpl(CRUDDao<Rubric> dao) {
-        this.dao = dao;
+    public RubricServiceImpl(CRUDDAO<Rubric> rubricDao) {
+        this.rubricDao = rubricDao;
     }
 
     @Override
     public void save(Rubric rubric) {
-        dao.save(rubric);
+        rubricDao.save(rubric);
     }
 
     @Override
     public void update(Rubric entity) {
-        dao.update(entity);
+        rubricDao.save(entity);
     }
 
     @Override
     public void deleteById(int id) {
-        dao.deleteById(id);
+        rubricDao.deleteById(id);
     }
 
     @Override
     public List<Rubric> findAll() {
-        List<Rubric> rubrics = dao.findAll();
-        if(rubrics.isEmpty())
-                throw new RubricException("Rubrics wasn't found");
+        List<Rubric> rubrics = rubricDao.findAll();
+        if (rubrics.isEmpty())
+            throw new RubricException("Rubrics wasn't found");
         return rubrics;
     }
 
     @Override
     public Rubric findById(int id) {
-        Rubric rubric = dao.findById(id);
-        if(rubric == null)
+        Optional<Rubric> foundRubric = rubricDao.findById(id);
+        if (foundRubric.isEmpty())
             throw new RubricException("Rubric with this id wasn't found");
-        return rubric;
+        return foundRubric.get();
     }
 }

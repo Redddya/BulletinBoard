@@ -10,6 +10,6 @@ public interface AnnouncementService extends CRUDService<Announcement> {
     void deleteAllByRubricId(int id);
     List<Announcement> showByRubricId(int id);
     List<Announcement> showByAuthorId(int id);
-    List<Announcement> showByKeyWord(String keyWord);
+    List<Announcement> showByKeyword(String keyWord);
     List<Announcement> showByDate(LocalDateTime date);
 }

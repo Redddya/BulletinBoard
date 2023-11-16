@@ -1,15 +1,16 @@
 package org.finalproject.controller;
 
+import jakarta.validation.Valid;
 import org.finalproject.domain.MatchingAd;
 import org.finalproject.service.MatchingAdService;
 import org.finalproject.util.exception.custom.MatchingAdException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,13 +20,14 @@ public class MatchingAdController {
     public MatchingAdController(MatchingAdService matchingAdService){
         this.matchingAdService = matchingAdService;
     }
+    @Secured(value = "USER")
     @GetMapping("/{id}")
     public MatchingAd getMatchingAd(@PathVariable int id){
         MatchingAd byId = matchingAdService.findById(id);
         System.out.println();
         return byId;
     }
-
+    @Secured(value = "ADMIN")
     @GetMapping
     public List<MatchingAd> getAllMatchingAds(){
         return matchingAdService.findAll();
@@ -37,7 +39,7 @@ public class MatchingAdController {
         matchingAdService.save(matchingAd);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+    @Secured(value = "USER")
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable int id,
                                              @RequestBody @Valid MatchingAd matchingAd, BindingResult bindingResult){
@@ -46,6 +48,7 @@ public class MatchingAdController {
         matchingAdService.update(matchingAd);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+    @Secured(value = "ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable int id){
         matchingAdService.deleteById(id);

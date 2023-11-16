@@ -1,49 +1,62 @@
 package org.finalproject.service.impl;
 
-import org.finalproject.dao.CRUDDao;
+import org.finalproject.dao.AuthorDAO;
 import org.finalproject.domain.Author;
-import org.finalproject.service.CRUDService;
+import org.finalproject.service.AuthorService;
 import org.finalproject.util.exception.custom.AuthorException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service
-public class AuthorServiceImpl implements CRUDService<Author> {
-    private final CRUDDao<Author> dao;
+import java.util.Optional;
 
-    public AuthorServiceImpl(CRUDDao<Author> dao) {
-        this.dao = dao;
+
+@Service
+public class AuthorServiceImpl implements AuthorService {
+    private final AuthorDAO authorDAO;
+    private final PasswordEncoder encoder;
+
+    public AuthorServiceImpl(@Qualifier("authorDAOImpl") AuthorDAO authorDAO, PasswordEncoder encoder) {
+        this.authorDAO = authorDAO;
+        this.encoder = encoder;
     }
 
     @Override
     public void save(Author author) {
-        dao.save(author);
+        author.setPassword(encoder.encode(author.getPassword()));
+        authorDAO.save(author);
     }
 
     @Override
     public void update(Author entity) {
-        dao.update(entity);
+        authorDAO.save(entity);
     }
 
     @Override
     public void deleteById(int id) {
-        dao.deleteById(id);
+        authorDAO.deleteById(id);
     }
 
     @Override
     public List<Author> findAll() {
-
-        List<Author> authors = dao.findAll();
-        if(authors.isEmpty())
+        List<Author> authors = authorDAO.findAll();
+        if (authors.isEmpty())
             throw new AuthorException("Any Authors wasn't found");
         return authors;
     }
 
     @Override
     public Author findById(int id) {
-        Author author = dao.findById(id);
-        if (author == null)
+        Optional<Author> foundAuthor = authorDAO.findById(id);
+        if (foundAuthor.isEmpty())
             throw new AuthorException("Author with this id wasn't found");
-        return author;
+        return foundAuthor.get();
+    }
+    public Author findByEmail(String email){
+        Optional<Author> foundAuthor = authorDAO.findByEmail(email);
+        if (foundAuthor.isEmpty())
+            throw new AuthorException("Author with this email wasn't found");
+        return foundAuthor.get();
     }
 }

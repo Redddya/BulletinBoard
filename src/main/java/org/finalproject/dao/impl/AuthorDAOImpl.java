@@ -1,54 +1,48 @@
 package org.finalproject.dao.impl;
 
-import org.finalproject.dao.AnnouncementDAO;
-import org.finalproject.dao.CRUDDao;
+import org.finalproject.dao.AuthorDAO;
 import org.finalproject.domain.Author;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.finalproject.repository.AuthorRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
-public class AuthorDAOImpl implements CRUDDao<Author> {
-    private final AnnouncementDAO dao;
-    @PersistenceContext
-    private EntityManager em;
-
-    public AuthorDAOImpl(AnnouncementDAO dao) {
-        this.dao = dao;
+public class AuthorDAOImpl implements AuthorDAO {
+    private final AuthorRepository authorRepository;
+    public AuthorDAOImpl(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     @Override
     public void save(Author entity) {
-        em.persist(entity);
+        authorRepository.save(entity);
     }
 
     @Override
     public void update(Author author) {
-        Author author1 = em.merge(author);
-        em.persist(author1);
+        authorRepository.save(author);
     }
 
     @Override
     public void deleteById(int id) {
-        dao.deleteAllByAuthorId(id);
-        Query query = em
-                .createQuery("DELETE Author a WHERE a.id = :author_id");
-        query.setParameter("author_id", id);
-        query.executeUpdate();
+       authorRepository.deleteById(id);
     }
 
     @Override
     public List<Author> findAll() {
-        TypedQuery<Author> query = em.createQuery("FROM Author a", Author.class);
-        return query.getResultList();
+        return authorRepository.findAll();
     }
 
     @Override
-    public Author findById(int id) {
-        return em.find(Author.class, id);
+    public Optional<Author> findById(int id) {
+        return authorRepository.findById(id);
+    }
+    @Override
+    public Optional<Author> findByEmail(String email){
+        return authorRepository.findByEmailEmail(email);
     }
 }

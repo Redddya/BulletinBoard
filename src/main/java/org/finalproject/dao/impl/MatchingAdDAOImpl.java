@@ -1,77 +1,55 @@
 package org.finalproject.dao.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.finalproject.dao.MatchingAdDAO;
 import org.finalproject.domain.Announcement;
 import org.finalproject.domain.MatchingAd;
+import org.finalproject.repository.MatchingAdRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
 public class MatchingAdDAOImpl implements MatchingAdDAO {
+    private final MatchingAdRepository matchingAdRepository;
     @PersistenceContext
     private EntityManager em;
-    @Override
-    public List<MatchingAd> filter(Announcement announcement) {
-        TypedQuery<MatchingAd> query = em.
-                createQuery(
-                        "SELECT ma " +
-                                "FROM MatchingAd ma " +
-                                "WHERE :an_pr BETWEEN ma.priceFrom AND ma.priceTo AND " +
-                                ":an_name LIKE CONCAT('%', ma.title, '%')", MatchingAd.class
-        );
-        query.setParameter("an_pr", announcement.getPrice());
-        query.setParameter("an_name", announcement.getName());
-        return query.getResultList();
+
+    public MatchingAdDAOImpl(MatchingAdRepository matchingAdRepository) {
+        this.matchingAdRepository = matchingAdRepository;
     }
 
     @Override
-    public int sendMassages(List<MatchingAd> matchingAds, Announcement announcement) {
-        int countOfMessage = 0;
-        for (MatchingAd match: matchingAds) {
-            System.out.println("Hi, " + match.getAuthor().getName() +
-                    "! I have a new purchase for you by your subscription on " + match.getRubric().getName() + " rubric. " +
-                    " So, my purchase is " + announcement.getName().toUpperCase() +
-                    "\n" + announcement.getText() +
-                    " \n With price " + announcement.getPrice() +
-                    " and author " + announcement.getAuthor().getName() + " with e-mail: "
-                            + announcement.getAuthor().getEmail().getEmail() +
-                    "\n We are waiting for you on our website!");
-            countOfMessage++;
-        }
-    return countOfMessage;
+    public List<MatchingAd> filter(Announcement announcement) {
+        return matchingAdRepository.findAllByAdvertisementParams(announcement.getName(), announcement.getPrice());
     }
 
     @Override
     public void save(MatchingAd entity) {
-        em.persist(entity);
+        matchingAdRepository.save(entity);
     }
 
     @Override
     public void update(MatchingAd entity) {
-        MatchingAd matchingAd = em.merge(entity);
-        em.persist(matchingAd);
+        matchingAdRepository.save(entity);
     }
 
     @Override
     public void deleteById(int id) {
-        Query query = em.
-                createQuery("DELETE MatchingAd ma WHERE ma.id = :ma_id");
-        query.setParameter("ma_id", id);
-        query.executeUpdate();
+        matchingAdRepository.deleteById(id);
     }
 
     @Override
     public List<MatchingAd> findAll() {
-        TypedQuery<MatchingAd> query = em.createQuery("FROM MatchingAd", MatchingAd.class);
-        return query.getResultList();
+        return matchingAdRepository.findAll();
     }
 
     @Override
-    public MatchingAd findById(int id) {
-        return em.find(MatchingAd.class, id);
+    public Optional<MatchingAd> findById(int id) {
+        return matchingAdRepository.findById(id);
     }
 }

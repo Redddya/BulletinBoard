@@ -1,28 +1,27 @@
 package org.finalproject.controller;
 
 
+import jakarta.validation.Valid;
 import org.finalproject.domain.Announcement;
 import org.finalproject.service.AnnouncementService;
-import org.finalproject.util.exception.AdBoardExceptionHandler;
 import org.finalproject.util.exception.custom.AnnouncementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/announcements")
 public class AnnouncementController {
     private final AnnouncementService announcementService;
-    private final AdBoardExceptionHandler adBoardExceptionHandler;
 
-    public AnnouncementController(AnnouncementService announcementService, AdBoardExceptionHandler adBoardExceptionHandler) {
+
+    public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
-        this.adBoardExceptionHandler = adBoardExceptionHandler;
     }
 
     @GetMapping("/{id}")
@@ -39,17 +38,17 @@ public class AnnouncementController {
     public List<Announcement> getAllAnnouncementsByRubricId(@PathVariable("id") int rubricId) {
         return announcementService.showByRubricId(rubricId);
     }
-
+    @Secured(value = "USER")
     @GetMapping("/author/{id}")
     public List<Announcement> getAllAnnouncementsByAuthorId(@PathVariable("id") int authorId) {
         return announcementService.showByAuthorId(authorId);
     }
 
-    @GetMapping("/keyWord/{keyWord}")//change on parameter
-    public List<Announcement> getAllAnnouncementsByKeyWord(@PathVariable String keyWord) {
-        return announcementService.showByKeyWord(keyWord);
+    @GetMapping("/keyword/{keyword}")//change on parameter
+    public List<Announcement> getAllAnnouncementsByKeyword(@PathVariable String keyword) {
+        return announcementService.showByKeyword(keyword);
     }
-
+    @Secured(value = "USER")
     @PostMapping("/new")
     public ResponseEntity<HttpStatus> create(
             @RequestBody @Valid Announcement announcement, BindingResult bindingResult) {
@@ -57,7 +56,7 @@ public class AnnouncementController {
         announcementService.save(announcement);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+    @Secured(value = "USER")
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable int id,
                                              @RequestBody @Valid Announcement announcement, BindingResult bindingResult) {
@@ -66,22 +65,22 @@ public class AnnouncementController {
         announcementService.update(announcement);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+    @Secured(value = "USER")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable int id) {
         announcementService.deleteById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+    @Secured(value = "ADMIN")
     @DeleteMapping("/{id}/rubric")
     public ResponseEntity<HttpStatus> deleteByRubricId(@PathVariable("id") int rubricId) {
         announcementService.deleteAllByRubricId(rubricId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
+    @Secured(value = "ADMIN")
     @DeleteMapping("/{id}/author")
     public ResponseEntity<HttpStatus> deleteByAuthorId(@PathVariable("id") int authorId) {
-        announcementService.deleteAllByRubricId(authorId);
+        announcementService.deleteAllByAuthorId(authorId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
